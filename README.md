@@ -17,7 +17,7 @@ cnt(Buffer.alloc(16, 0xff))
 
 ## API
 
-The lane width of all APIs is determined by the input buffer. That is, if providing a `Uint8Array` the lane width will be 8, if providing providing a `Uint16Array` the lane width will be 16 and so on.
+The lane width of all APIs is determined by the input buffer. That is, if providing a `Uint8Array` the lane width will be 8 bits, if providing a `Uint16Array` the lane width will be 16 bits and so on.
 
 #### `const result = cnt(buffer[, result])`
 
