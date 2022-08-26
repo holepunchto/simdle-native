@@ -8,6 +8,7 @@
       './libsimd/src/cnt.c',
       './libsimd/src/cto.c',
       './libsimd/src/ctz.c',
+      './libsimd/src/not.c',
     ],
     'configurations': {
       'Debug': {
