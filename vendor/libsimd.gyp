@@ -3,12 +3,7 @@
     'target_name': 'simd',
     'type': 'static_library',
     'sources': [
-      './libsimd/src/clo.c',
-      './libsimd/src/clz.c',
-      './libsimd/src/cnt.c',
-      './libsimd/src/cto.c',
-      './libsimd/src/ctz.c',
-      './libsimd/src/not.c',
+      './libsimd/src/extern.c',
     ],
     'configurations': {
       'Debug': {

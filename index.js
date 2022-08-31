@@ -1,7 +1,7 @@
 const binding = require('node-gyp-build')(__dirname)
 const b4a = require('b4a')
 
-exports.clo = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.clo = function clo (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
@@ -14,7 +14,7 @@ exports.clo = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   return result
 }
 
-exports.clz = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.clz = function clz (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
@@ -27,7 +27,7 @@ exports.clz = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   return result
 }
 
-exports.cnt = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.cnt = function cnt (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
@@ -40,7 +40,7 @@ exports.cnt = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   return result
 }
 
-exports.cto = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.cto = function cto (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
@@ -53,7 +53,7 @@ exports.cto = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   return result
 }
 
-exports.ctz = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.ctz = function ctz (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
@@ -66,7 +66,7 @@ exports.ctz = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   return result
 }
 
-exports.not = function (buf, result = b4a.allocUnsafe(buf.byteLength)) {
+exports.not = function not (buf, result = b4a.allocUnsafe(buf.byteLength)) {
   if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
   if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
 
