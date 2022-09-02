@@ -3,8 +3,13 @@ const b4a = require('b4a')
 
 function unary (u8, u16, u32) {
   return function unary (buf, result = b4a.allocUnsafe(buf.byteLength)) {
-    if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
-    if (buf.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
+    if (buf.byteLength % 16 !== 0) {
+      throw new Error('Buffer length must be a multiple of 16')
+    }
+
+    if (buf.byteLength !== result.byteLength) {
+      throw new Error('Length of result buffer is insufficient')
+    }
 
     const n = buf.BYTES_PER_ELEMENT
 
@@ -18,9 +23,13 @@ function unary (u8, u16, u32) {
 
 function binary (u8, u16, u32) {
   return function binary (a, b, result = b4a.allocUnsafe(a.byteLength)) {
-    if (a.byteLength !== b.byteLength) throw new Error('Buffers must be the same length')
-    if (a.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
-    if (a.byteLength > result.byteLength) throw new Error('Length of result buffer is insufficient')
+    if (a.byteLength % 16 !== 0) {
+      throw new Error('Buffer length must be a multiple of 16')
+    }
+
+    if (a.byteLength !== b.byteLength || a.byteLength !== result.byteLength) {
+      throw new Error('Buffers must be the same length')
+    }
 
     const n = a.BYTES_PER_ELEMENT
 
@@ -34,7 +43,9 @@ function binary (u8, u16, u32) {
 
 function reduce (u8, u16, u32) {
   return function reduce (buf) {
-    if (buf.byteLength % 16 !== 0) throw new Error('Buffer length must be a multiple of 16')
+    if (buf.byteLength % 16 !== 0) {
+      throw new Error('Buffer length must be a multiple of 16')
+    }
 
     const n = buf.BYTES_PER_ELEMENT
 
