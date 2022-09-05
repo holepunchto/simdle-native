@@ -1,6 +1,6 @@
 {
   'targets': [{
-    'target_name': 'simdle',
+    'target_name': 'libsimdle',
     'type': 'static_library',
     'sources': [
       './libsimdle/src/extern.c',

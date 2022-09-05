@@ -6,7 +6,7 @@
       './vendor/libsimdle/include',
     ],
     'dependencies': [
-      './vendor/libsimdle.gyp:simdle',
+      './vendor/libsimdle.gyp:libsimdle',
     ],
     'sources': [
       './binding.c',
