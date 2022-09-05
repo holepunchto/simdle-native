@@ -1,17 +1,17 @@
 {
-  "name": "simd-native",
+  "name": "simdle-native",
   "version": "1.0.0",
-  "description": "libsimd JavaScript bindings for Node.js",
+  "description": "libsimdle JavaScript bindings for Node.js",
   "main": "index.js",
   "files": [
     "index.js",
     "prebuilds",
     "binding.c",
     "binding.gyp",
-    "vendor/libsimd/LICENSE",
-    "vendor/libsimd/include",
-    "vendor/libsimd/src",
-    "vendor/libsimd.gyp"
+    "vendor/libsimdle/LICENSE",
+    "vendor/libsimdle/include",
+    "vendor/libsimdle/src",
+    "vendor/libsimdle.gyp"
   ],
   "scripts": {
     "test": "standard && brittle test.mjs",
@@ -20,14 +20,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/holepunchto/simd-native.git"
+    "url": "git+https://github.com/holepunchto/simdle-native.git"
   },
   "author": "Kasper Isager Dalsgarð <kasper@funktionel.co>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/holepunchto/simd-native/issues"
+    "url": "https://github.com/holepunchto/simdle-native/issues"
   },
-  "homepage": "https://github.com/holepunchto/simd-native#readme",
+  "homepage": "https://github.com/holepunchto/simdle-native#readme",
   "dependencies": {
     "b4a": "^1.6.0",
     "napi-macros": "^2.0.0",

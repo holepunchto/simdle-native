@@ -1,12 +1,12 @@
 {
   'targets': [{
-    'target_name': 'simd',
+    'target_name': 'simdle',
     'include_dirs': [
       '<!(node -e "require(\'napi-macros\')")',
-      './vendor/libsimd/include',
+      './vendor/libsimdle/include',
     ],
     'dependencies': [
-      './vendor/libsimd.gyp:simd',
+      './vendor/libsimdle.gyp:simdle',
     ],
     'sources': [
       './binding.c',

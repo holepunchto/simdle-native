@@ -1,9 +1,9 @@
 {
   'targets': [{
-    'target_name': 'simd',
+    'target_name': 'simdle',
     'type': 'static_library',
     'sources': [
-      './libsimd/src/extern.c',
+      './libsimdle/src/extern.c',
     ],
     'configurations': {
       'Debug': {

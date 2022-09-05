@@ -56,67 +56,67 @@ function reduce (u8, u16, u32) {
 }
 
 exports.and = binary(
-  binding.simd_napi_and_v128_u8,
-  binding.simd_napi_and_v128_u16,
-  binding.simd_napi_and_v128_u32
+  binding.simdle_napi_and_v128_u8,
+  binding.simdle_napi_and_v128_u16,
+  binding.simdle_napi_and_v128_u32
 )
 
 exports.clear = binary(
-  binding.simd_napi_clear_v128_u8,
-  binding.simd_napi_clear_v128_u16,
-  binding.simd_napi_clear_v128_u32
+  binding.simdle_napi_clear_v128_u8,
+  binding.simdle_napi_clear_v128_u16,
+  binding.simdle_napi_clear_v128_u32
 )
 
 exports.clo = unary(
-  binding.simd_napi_clo_v128_u8,
-  binding.simd_napi_clo_v128_u16,
-  binding.simd_napi_clo_v128_u32
+  binding.simdle_napi_clo_v128_u8,
+  binding.simdle_napi_clo_v128_u16,
+  binding.simdle_napi_clo_v128_u32
 )
 
 exports.clz = unary(
-  binding.simd_napi_clz_v128_u8,
-  binding.simd_napi_clz_v128_u16,
-  binding.simd_napi_clz_v128_u32
+  binding.simdle_napi_clz_v128_u8,
+  binding.simdle_napi_clz_v128_u16,
+  binding.simdle_napi_clz_v128_u32
 )
 
 exports.cnt = unary(
-  binding.simd_napi_cnt_v128_u8,
-  binding.simd_napi_cnt_v128_u16,
-  binding.simd_napi_cnt_v128_u32
+  binding.simdle_napi_cnt_v128_u8,
+  binding.simdle_napi_cnt_v128_u16,
+  binding.simdle_napi_cnt_v128_u32
 )
 
 exports.cto = unary(
-  binding.simd_napi_cto_v128_u8,
-  binding.simd_napi_cto_v128_u16,
-  binding.simd_napi_cto_v128_u32
+  binding.simdle_napi_cto_v128_u8,
+  binding.simdle_napi_cto_v128_u16,
+  binding.simdle_napi_cto_v128_u32
 )
 
 exports.ctz = unary(
-  binding.simd_napi_ctz_v128_u8,
-  binding.simd_napi_ctz_v128_u16,
-  binding.simd_napi_ctz_v128_u32
+  binding.simdle_napi_ctz_v128_u8,
+  binding.simdle_napi_ctz_v128_u16,
+  binding.simdle_napi_ctz_v128_u32
 )
 
 exports.not = unary(
-  binding.simd_napi_not_v128_u8,
-  binding.simd_napi_not_v128_u16,
-  binding.simd_napi_not_v128_u32
+  binding.simdle_napi_not_v128_u8,
+  binding.simdle_napi_not_v128_u16,
+  binding.simdle_napi_not_v128_u32
 )
 
 exports.or = binary(
-  binding.simd_napi_or_v128_u8,
-  binding.simd_napi_or_v128_u16,
-  binding.simd_napi_or_v128_u32
+  binding.simdle_napi_or_v128_u8,
+  binding.simdle_napi_or_v128_u16,
+  binding.simdle_napi_or_v128_u32
 )
 
 exports.sum = reduce(
-  binding.simd_napi_sum_v128_u8,
-  binding.simd_napi_sum_v128_u16,
-  binding.simd_napi_sum_v128_u32
+  binding.simdle_napi_sum_v128_u8,
+  binding.simdle_napi_sum_v128_u16,
+  binding.simdle_napi_sum_v128_u32
 )
 
 exports.xor = binary(
-  binding.simd_napi_xor_v128_u8,
-  binding.simd_napi_xor_v128_u16,
-  binding.simd_napi_xor_v128_u32
+  binding.simdle_napi_xor_v128_u8,
+  binding.simdle_napi_xor_v128_u16,
+  binding.simdle_napi_xor_v128_u32
 )

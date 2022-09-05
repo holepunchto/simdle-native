@@ -1,15 +1,15 @@
-# simd-native
+# simdle-native
 
-https://github.com/holepunchto/libsimd JavaScript bindings for Node.js.
+https://github.com/holepunchto/libsimdle JavaScript bindings for Node.js.
 
 ```sh
-npm install simd-native
+npm install simdle-native
 ```
 
 ## Usage
 
 ```js
-const { cnt } = require('simd-native')
+const { cnt } = require('simdle-native')
 
 cnt(Buffer.alloc(16, 0xff))
 // <Buffer 08 08 08 08 08 08 08 08 08 08 08 08 08 08 08 08>
