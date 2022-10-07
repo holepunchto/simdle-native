@@ -39,6 +39,32 @@
   NAPI_STATUS_THROWS(napi_create_bigint_uint64(env, result, &napi_result)) \
   return napi_result;
 
+NAPI_METHOD(simdle_napi_allo_v128) {
+  NAPI_ARGV(1);
+  NAPI_ARGV_BUFFER_CAST(simdle_v128_t *, buf, 0);
+
+  for (size_t i = 0, n = buf_len / 16; i < n; i++) {
+    if (!simdle_allo_v128(buf[i])) {
+      NAPI_RETURN_UINT32(0)
+    }
+  }
+
+  NAPI_RETURN_UINT32(1)
+}
+
+NAPI_METHOD(simdle_napi_allz_v128) {
+  NAPI_ARGV(1);
+  NAPI_ARGV_BUFFER_CAST(simdle_v128_t *, buf, 0);
+
+  for (size_t i = 0, n = buf_len / 16; i < n; i++) {
+    if (!simdle_allz_v128(buf[i])) {
+      NAPI_RETURN_UINT32(0)
+    }
+  }
+
+  NAPI_RETURN_UINT32(1)
+}
+
 NAPI_METHOD(simdle_napi_and_v128_u8) {
   SIMDLE_NAPI_BINARY(simdle_and_v128_u8);
 }
@@ -172,6 +198,9 @@ NAPI_METHOD(simdle_napi_xor_v128_u32) {
 }
 
 NAPI_INIT() {
+  NAPI_EXPORT_FUNCTION(simdle_napi_allo_v128);
+  NAPI_EXPORT_FUNCTION(simdle_napi_allz_v128);
+
   NAPI_EXPORT_FUNCTION(simdle_napi_and_v128_u8);
   NAPI_EXPORT_FUNCTION(simdle_napi_and_v128_u16);
   NAPI_EXPORT_FUNCTION(simdle_napi_and_v128_u32);

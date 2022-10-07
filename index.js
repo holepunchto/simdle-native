@@ -55,6 +55,22 @@ function reduce (u8, u16, u32) {
   }
 }
 
+exports.allo = function allo (buf) {
+  if (buf.byteLength % 16 !== 0) {
+    throw new Error('Buffer length must be a multiple of 16')
+  }
+
+  return binding.simdle_napi_allo_v128(buf) !== 0
+}
+
+exports.allz = function allz (buf) {
+  if (buf.byteLength % 16 !== 0) {
+    throw new Error('Buffer length must be a multiple of 16')
+  }
+
+  return binding.simdle_napi_allz_v128(buf) !== 0
+}
+
 exports.and = binary(
   binding.simdle_napi_and_v128_u8,
   binding.simdle_napi_and_v128_u16,
