@@ -11,7 +11,8 @@
     "vendor/libsimdle/LICENSE",
     "vendor/libsimdle/include",
     "vendor/libsimdle/src",
-    "vendor/libsimdle.gyp"
+    "vendor/libsimdle.gyp",
+    "CMakeLists.txt"
   ],
   "scripts": {
     "test": "standard && brittle test.mjs",
