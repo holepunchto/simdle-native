@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.25)
 
 project(simdle_native C)
 
-include(pear)
+include(bare)
 
 if(NOT TARGET simdle)
   add_subdirectory(vendor/libsimdle EXCLUDE_FROM_ALL)
 endif()
 
-add_pear_module(simdle_native)
+add_bare_module(simdle_native)
 
 target_sources(
   simdle_native
