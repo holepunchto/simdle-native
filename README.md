@@ -73,4 +73,4 @@ Compute the bitwise XOR of `a` and `b`. If `result` is not provided, a fresh buf
 
 ## License
 
-ISC
+Apache-2.0
