@@ -1,6 +1,6 @@
 import test from 'brittle'
 
-import { cnt } from './index.js'
+import { cnt, allo } from './index.js'
 
 test('cnt', (t) => {
   t.test('uint8array', (t) => {
@@ -40,5 +40,40 @@ test('cnt', (t) => {
     ), result)
 
     t.alike(result, Uint32Array.of(0, 1, 2, 3))
+  })
+})
+
+test('allo', (t) => {
+  t.test('uint8array', (t) => {
+    const result = allo(Uint8Array.of(
+      0b11111111, 0b11111111, 0b11111111, 0b11111111,
+      0b11111111, 0b11111111, 0b11111111, 0b11111111,
+      0b11111111, 0b11111111, 0b11111111, 0b11111111,
+      0b11111111, 0b11111111, 0b11111111, 0b11111111
+    ))
+
+    t.ok(result)
+  })
+
+  t.test('uint16array', (t) => {
+    const result = allo(Uint16Array.of(
+      0b1111111111111111, 0b1111111111111111,
+      0b1111111111111111, 0b1111111111111111,
+      0b1111111111111111, 0b1111111111111111,
+      0b1111111111111111, 0b1111111111111111
+    ))
+
+    t.ok(result)
+  })
+
+  t.test('uint32array', (t) => {
+    const result = allo(Uint32Array.of(
+      0b11111111111111111111111111111111,
+      0b11111111111111111111111111111111,
+      0b11111111111111111111111111111111,
+      0b11111111111111111111111111111111
+    ))
+
+    t.ok(result)
   })
 })
