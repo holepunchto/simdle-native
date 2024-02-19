@@ -12,8 +12,6 @@ add_bare_module(simdle_native)
 
 target_sources(
   ${simdle_native}
-  PUBLIC
-    $<TARGET_OBJECTS:simdle>
   PRIVATE
     binding.c
 )
@@ -21,5 +19,5 @@ target_sources(
 target_link_libraries(
   ${simdle_native}
   PUBLIC
-    simdle
+    simdle_static
 )
