@@ -1,4 +1,4 @@
-const binding = require('node-gyp-build')(__dirname)
+const binding = require('./binding')
 const b4a = require('b4a')
 
 function unary (u8, u16, u32) {

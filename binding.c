@@ -1,6 +1,7 @@
-#include <napi-macros.h>
 #include <node_api.h>
 #include <simdle.h>
+
+#include "macros.h"
 
 #define SIMDLE_NAPI_UNARY(fn) \
   NAPI_ARGV(2); \
