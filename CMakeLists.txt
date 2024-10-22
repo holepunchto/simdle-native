@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(simdle_native C)
+find_package(cmake-bare REQUIRED PATHS node_modules/cmake-bare)
+find_package(cmake-napi REQUIRED PATHS node_modules/cmake-napi)
 
-include(bare)
-include(napi)
+project(simdle_native C)
 
 if(NOT TARGET simdle)
   add_subdirectory(vendor/libsimdle EXCLUDE_FROM_ALL)
