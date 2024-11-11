@@ -9,8 +9,7 @@
     "binding.c",
     "binding.js",
     "CMakeLists.txt",
-    "prebuilds",
-    "vendor/libsimdle"
+    "prebuilds"
   ],
   "addon": true,
   "scripts": {
