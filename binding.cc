@@ -15,7 +15,6 @@ struct simdle_op {
   ) {
     int err;
 
-#if 1
     simdle_v128_t *buf_data;
     size_t buf_len = 0;
 
@@ -31,25 +30,6 @@ struct simdle_op {
     for (size_t i = 0, n = buf_len * sizeof(W) / 16; i < n; i++) {
       result_data[i] = fn(buf_data[i]);
     }
-#else
-    // Produces about 2X more instructions
-    std::span<W> bs;
-    err = js_get_typedarray_info(env, buf, bs);
-    assert(err == 0);
-
-    simdle_v128_t *buf_data = reinterpret_cast<simdle_v128_t *>(bs.data());
-
-    std::span<W> rs;
-    err = js_get_typedarray_info(env, result, rs);
-    assert(err == 0);
-
-    simdle_v128_t *result_data = reinterpret_cast<simdle_v128_t *>(rs.data());
-
-    // printf("bs len=%zu len_bytes=%zu\n", bs.size(), bs.size_bytes());
-    for (size_t i = 0, n = bs.size_bytes() / 16; i < n; i++) {
-      result_data[i] = fn(buf_data[i]);
-    }
-#endif
   }
 
   static inline void
