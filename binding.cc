@@ -6,8 +6,6 @@
 
 template<auto fn, typename W>
 struct simdle_op {
-  // using W = uint16_t;
-
   static inline void
   unary (
     js_env_t *env,
@@ -17,13 +15,9 @@ struct simdle_op {
   ) {
     int err;
 
-    // Both versions are correct
-    // (old impl used napi_get_buffer_info() which would
-    // always return size in bytes)
-    // TODO: Check compiler output
-#if 0
+#if 1
     simdle_v128_t *buf_data;
-    size_t buf_len = 0; // n-elements
+    size_t buf_len = 0;
 
     err = js_get_typedarray_info(env, buf, reinterpret_cast<W *&>(buf_data), buf_len);
     assert(err == 0);
@@ -62,39 +56,46 @@ struct simdle_op {
   binary (
     js_env_t *env,
     js_receiver_t,
-    js_typedarray_t<uint8_t> a_buf,
-    js_typedarray_t<uint8_t> b_buf,
-    js_typedarray_t<simdle_v128_t> result_buf
+    js_typedarray_t<W> a_buf,
+    js_typedarray_t<W> b_buf,
+    js_typedarray_t<W> result_buf
   ) {
     int err;
-    simdle_v128_t *a, *b, *result;
-
-    err = js_get_typedarray_info(env, a_buf, a);
-    assert(err == 0);
-
-    err = js_get_typedarray_info(env, b_buf, b);
-    assert(err == 0);
 
     size_t len = 0;
-    err = js_get_typedarray_info(env, result_buf, result, len);
+
+    simdle_v128_t *a;
+    err = js_get_typedarray_info(env, a_buf, reinterpret_cast<W *&>(a), len);
     assert(err == 0);
 
-    for (size_t i = 0, n = len / 16; i < n; i++) {
+    simdle_v128_t *b;
+    err = js_get_typedarray_info(env, b_buf, reinterpret_cast<W *&>(b), len);
+    assert(err == 0);
+
+    simdle_v128_t *result;
+    err = js_get_typedarray_info(env, result_buf, reinterpret_cast<W *&>(result), len);
+    assert(err == 0);
+
+    for (size_t i = 0, n = len * sizeof(W) / 16; i < n; i++) {
       result[i] = fn(a[i], b[i]);
     }
   }
 
   static inline int64_t
-  reduce (js_env_t *env, js_receiver_t, js_typedarray_t<simdle_v128_t> buffer) {
+  reduce (
+    js_env_t *env,
+    js_receiver_t,
+    js_typedarray_t<W> buffer
+  ) {
     simdle_v128_t *buf;
     size_t buf_len;
 
-    int err = js_get_typedarray_info(env, buffer, buf, buf_len);
+    int err = js_get_typedarray_info(env, buffer, reinterpret_cast<W *&>(buf), buf_len);
     assert(err == 0);
 
     uint64_t result = 0;
 
-    for (size_t i = 0, n = buf_len / 16; i < n; i++) {
+    for (size_t i = 0, n = buf_len  * sizeof(W) / 16; i < n; i++) {
       result += fn(buf[i]);
     }
 
@@ -102,7 +103,7 @@ struct simdle_op {
   }
 };
 
-inline uint32_t // TODO: check if inline has any effect
+static inline uint32_t
 simdle_napi_allo_v128 (js_env_t *env, js_receiver_t, js_typedarray_t<simdle_v128_t> buffer) {
   simdle_v128_t *buf;
   size_t buf_len;
@@ -117,7 +118,7 @@ simdle_napi_allo_v128 (js_env_t *env, js_receiver_t, js_typedarray_t<simdle_v128
   return 1;
 }
 
-inline uint32_t
+static inline uint32_t
 simdle_napi_allz_v128 (js_env_t *env, js_receiver_t, js_typedarray_t<simdle_v128_t> buffer) {
   simdle_v128_t *buf;
   size_t buf_len;
@@ -132,69 +133,49 @@ simdle_napi_allz_v128 (js_env_t *env, js_receiver_t, js_typedarray_t<simdle_v128
   return 1;
 }
 
-#define SIMDLE_NAPI_BINARY(name, fn) \
-  constexpr inline auto name = simdle_op<fn>::binary;
+constexpr inline auto simdle_napi_cnt_v128_u8  = simdle_op<simdle_cnt_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_cnt_v128_u16 = simdle_op<simdle_cnt_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_cnt_v128_u32 = simdle_op<simdle_cnt_v128_u32, uint32_t>::unary;
 
-#define SIMDLE_NAPI_UNARY(name, fn, width) \
-  constexpr inline auto name = simdle_op<fn, width>::unary;
+constexpr inline auto simdle_napi_clo_v128_u8  = simdle_op<simdle_clo_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_clo_v128_u16 = simdle_op<simdle_clo_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_clo_v128_u32 = simdle_op<simdle_clo_v128_u32, uint32_t>::unary;
 
-#define SIMDLE_NAPI_REDUCE(name, fn) \
-  constexpr inline auto name = simdle_op<fn>::reduce;
+constexpr inline auto simdle_napi_clz_v128_u8  = simdle_op<simdle_clz_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_clz_v128_u16 = simdle_op<simdle_clz_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_clz_v128_u32 = simdle_op<simdle_clz_v128_u32, uint32_t>::unary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_cnt_v128_u8, simdle_cnt_v128_u8, uint8_t)
-SIMDLE_NAPI_UNARY(simdle_napi_cnt_v128_u16, simdle_cnt_v128_u16, uint16_t)
-SIMDLE_NAPI_UNARY(simdle_napi_cnt_v128_u32, simdle_cnt_v128_u32, uint32_t)
+constexpr inline auto simdle_napi_cto_v128_u8  = simdle_op<simdle_cto_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_cto_v128_u16 = simdle_op<simdle_cto_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_cto_v128_u32 = simdle_op<simdle_cto_v128_u32, uint32_t>::unary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u8, simdle_clz_v128_u8, uint8_t)
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u16, simdle_clz_v128_u16, uint16_t)
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u32, simdle_clz_v128_u32, uint32_t)
+constexpr inline auto simdle_napi_ctz_v128_u8  = simdle_op<simdle_ctz_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_ctz_v128_u16 = simdle_op<simdle_ctz_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_ctz_v128_u32 = simdle_op<simdle_ctz_v128_u32, uint32_t>::unary;
 
-#if 0
-SIMDLE_NAPI_BINARY(simdle_napi_and_v128_u8, simdle_and_v128_u8)
-SIMDLE_NAPI_BINARY(simdle_napi_and_v128_u16, simdle_and_v128_u16)
-SIMDLE_NAPI_BINARY(simdle_napi_and_v128_u32, simdle_and_v128_u32)
+constexpr inline auto simdle_napi_not_v128_u8  = simdle_op<simdle_not_v128_u8,  uint8_t>::unary;
+constexpr inline auto simdle_napi_not_v128_u16 = simdle_op<simdle_not_v128_u16, uint16_t>::unary;
+constexpr inline auto simdle_napi_not_v128_u32 = simdle_op<simdle_not_v128_u32, uint32_t>::unary;
 
-SIMDLE_NAPI_BINARY(simdle_napi_clear_v128_u8, simdle_clear_v128_u8)
-SIMDLE_NAPI_BINARY(simdle_napi_clear_v128_u16, simdle_clear_v128_u16)
-SIMDLE_NAPI_BINARY(simdle_napi_clear_v128_u32, simdle_clear_v128_u32)
+constexpr inline auto simdle_napi_and_v128_u8   = simdle_op<simdle_and_v128_u8,   uint8_t>::binary;
+constexpr inline auto simdle_napi_and_v128_u16  = simdle_op<simdle_and_v128_u16,  uint16_t>::binary;
+constexpr inline auto simdle_napi_and_v128_u32  = simdle_op<simdle_and_v128_u32,  uint32_t>::binary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_clo_v128_u8, simdle_clo_v128_u8)
+constexpr inline auto simdle_napi_clear_v128_u8  = simdle_op<simdle_clear_v128_u8,  uint8_t>::binary;
+constexpr inline auto simdle_napi_clear_v128_u16 = simdle_op<simdle_clear_v128_u16, uint16_t>::binary;
+constexpr inline auto simdle_napi_clear_v128_u32 = simdle_op<simdle_clear_v128_u32, uint32_t>::binary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_clo_v128_u16, simdle_clo_v128_u16)
-SIMDLE_NAPI_UNARY(simdle_napi_clo_v128_u32, simdle_clo_v128_u32)
+constexpr inline auto simdle_napi_or_v128_u8   = simdle_op<simdle_or_v128_u8,   uint8_t>::binary;
+constexpr inline auto simdle_napi_or_v128_u16  = simdle_op<simdle_or_v128_u16,  uint16_t>::binary;
+constexpr inline auto simdle_napi_or_v128_u32  = simdle_op<simdle_or_v128_u32,  uint32_t>::binary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u8, simdle_clz_v128_u8)
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u16, simdle_clz_v128_u16)
-SIMDLE_NAPI_UNARY(simdle_napi_clz_v128_u32, simdle_clz_v128_u32)
+constexpr inline auto simdle_napi_xor_v128_u8   = simdle_op<simdle_xor_v128_u8,   uint8_t>::binary;
+constexpr inline auto simdle_napi_xor_v128_u16  = simdle_op<simdle_xor_v128_u16,  uint16_t>::binary;
+constexpr inline auto simdle_napi_xor_v128_u32  = simdle_op<simdle_xor_v128_u32,  uint32_t>::binary;
 
-SIMDLE_NAPI_UNARY(simdle_napi_cto_v128_u8, simdle_cto_v128_u8)
-SIMDLE_NAPI_UNARY(simdle_napi_cto_v128_u16, simdle_cto_v128_u16)
-SIMDLE_NAPI_UNARY(simdle_napi_cto_v128_u32, simdle_cto_v128_u32)
-
-SIMDLE_NAPI_UNARY(simdle_napi_ctz_v128_u8, simdle_ctz_v128_u8)
-SIMDLE_NAPI_UNARY(simdle_napi_ctz_v128_u16, simdle_ctz_v128_u16)
-SIMDLE_NAPI_UNARY(simdle_napi_ctz_v128_u32, simdle_ctz_v128_u32)
-
-SIMDLE_NAPI_UNARY(simdle_napi_not_v128_u8, simdle_not_v128_u8)
-SIMDLE_NAPI_UNARY(simdle_napi_not_v128_u16, simdle_not_v128_u16)
-SIMDLE_NAPI_UNARY(simdle_napi_not_v128_u32, simdle_not_v128_u32)
-
-SIMDLE_NAPI_BINARY(simdle_napi_or_v128_u8, simdle_or_v128_u8)
-SIMDLE_NAPI_BINARY(simdle_napi_or_v128_u16, simdle_or_v128_u16)
-SIMDLE_NAPI_BINARY(simdle_napi_or_v128_u32, simdle_or_v128_u32)
-
-SIMDLE_NAPI_REDUCE(simdle_napi_sum_v128_u8, simdle_sum_v128_u8)
-SIMDLE_NAPI_REDUCE(simdle_napi_sum_v128_u16, simdle_sum_v128_u16)
-SIMDLE_NAPI_REDUCE(simdle_napi_sum_v128_u32, simdle_sum_v128_u32)
-
-SIMDLE_NAPI_BINARY(simdle_napi_xor_v128_u8, simdle_xor_v128_u8)
-SIMDLE_NAPI_BINARY(simdle_napi_xor_v128_u16, simdle_xor_v128_u16)
-SIMDLE_NAPI_BINARY(simdle_napi_xor_v128_u32, simdle_xor_v128_u32)
-#endif
-
-#undef SIMDLE_NAPI_BINARY
-#undef SIMDLE_NAPI_UNARY
-#undef SIMDLE_NAPI_REDUCE
+constexpr inline auto simdle_napi_sum_v128_u8   = simdle_op<simdle_sum_v128_u8,   uint8_t>::reduce;
+constexpr inline auto simdle_napi_sum_v128_u16  = simdle_op<simdle_sum_v128_u16,  uint16_t>::reduce;
+constexpr inline auto simdle_napi_sum_v128_u32  = simdle_op<simdle_sum_v128_u32,  uint32_t>::reduce;
 
 static js_value_t *
 bare_addon_exports(js_env_t *env, js_value_t *exports) {
@@ -215,7 +196,6 @@ bare_addon_exports(js_env_t *env, js_value_t *exports) {
   EXPORT_FUNCTION(simdle_napi_clz_v128_u16);
   EXPORT_FUNCTION(simdle_napi_clz_v128_u32);
 
-#if 0
   EXPORT_FUNCTION(simdle_napi_and_v128_u8);
   EXPORT_FUNCTION(simdle_napi_and_v128_u16);
   EXPORT_FUNCTION(simdle_napi_and_v128_u32);
@@ -251,8 +231,6 @@ bare_addon_exports(js_env_t *env, js_value_t *exports) {
   EXPORT_FUNCTION(simdle_napi_xor_v128_u8);
   EXPORT_FUNCTION(simdle_napi_xor_v128_u16);
   EXPORT_FUNCTION(simdle_napi_xor_v128_u32);
-#endif
-
 #undef EXPORT_FUNCTION
 
   return exports;
