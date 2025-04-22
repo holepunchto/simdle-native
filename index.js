@@ -4,6 +4,7 @@ const b4a = require('b4a')
 function unary (u8, u16, u32) {
   return function unary (buf, result = b4a.allocUnsafe(buf.byteLength)) {
     if (buf.byteLength % 16 !== 0) {
+      console.log(buf.byteLength)
       throw new Error('Buffer length must be a multiple of 16')
     }
 

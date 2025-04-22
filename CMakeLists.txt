@@ -13,8 +13,8 @@ if(target MATCHES "win32")
 endif()
 
 fetch_package("github:holepunchto/libsimdle#014ad4e")
-# fetch_package("github:holepunchto/libjstl#2c6bb51")
-add_subdirectory("../libjstl" "${CMAKE_BINARY_DIR}/libjstl")
+fetch_package("github:holepunchto/libjstl#f7f4cb3")
+# add_subdirectory("../libjstl" "${CMAKE_BINARY_DIR}/libjstl")
 
 add_bare_module(simdle_native_bare)
 
