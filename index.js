@@ -1,10 +1,23 @@
 const binding = require('./binding')
 const b4a = require('b4a')
 
+function predicate (u8, u16, u32) {
+  return function predicate (buf) {
+    if (buf.byteLength % 16 !== 0) {
+      throw new Error('Buffer length must be a multiple of 16')
+    }
+
+    const n = buf.BYTES_PER_ELEMENT
+
+    if (n === 1) return u8(buf)
+    if (n === 2) return u16(buf)
+    return u32(buf)
+  }
+}
+
 function unary (u8, u16, u32) {
   return function unary (buf, result = b4a.allocUnsafe(buf.byteLength)) {
     if (buf.byteLength % 16 !== 0) {
-      console.log(buf.byteLength)
       throw new Error('Buffer length must be a multiple of 16')
     }
 
@@ -56,21 +69,17 @@ function reduce (u8, u16, u32) {
   }
 }
 
-exports.allo = function allo (buf) {
-  if (buf.byteLength % 16 !== 0) {
-    throw new Error('Buffer length must be a multiple of 16')
-  }
+exports.allo = predicate(
+  binding.simdle_napi_allo_v128_u8,
+  binding.simdle_napi_allo_v128_u16,
+  binding.simdle_napi_allo_v128_u32
+)
 
-  return binding.simdle_napi_allo_v128(buf) !== 0
-}
-
-exports.allz = function allz (buf) {
-  if (buf.byteLength % 16 !== 0) {
-    throw new Error('Buffer length must be a multiple of 16')
-  }
-
-  return binding.simdle_napi_allz_v128(buf) !== 0
-}
+exports.allz = predicate(
+  binding.simdle_napi_allz_v128_u8,
+  binding.simdle_napi_allz_v128_u16,
+  binding.simdle_napi_allz_v128_u32
+)
 
 exports.and = binary(
   binding.simdle_napi_and_v128_u8,

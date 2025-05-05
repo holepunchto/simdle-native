@@ -2,7 +2,7 @@ import test from 'brittle'
 
 import { cnt, allo } from './index.js'
 
-test.solo('cnt', (t) => {
+test('cnt', (t) => {
   t.test('uint8array', (t) => {
     const result = new Uint8Array(16)
 

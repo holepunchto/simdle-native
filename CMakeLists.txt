@@ -13,7 +13,7 @@ if(target MATCHES "win32")
 endif()
 
 fetch_package("github:holepunchto/libsimdle#014ad4e")
-fetch_package("github:holepunchto/libjstl#69cd2be")
+fetch_package("github:holepunchto/libjstl#9f0573f")
 
 add_bare_module(simdle_native_bare)
 
