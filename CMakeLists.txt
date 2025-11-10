@@ -49,6 +49,12 @@ target_link_libraries(
     simdle
 )
 
+target_compile_definitions(
+  ${simdle_native_node}
+  PRIVATE
+    NAPI_VERSION=9
+)
+
 resolve_node_module(bare-compat-napi compat)
 
 target_include_directories(
