@@ -9,9 +9,11 @@ jobs:
           - os: ubuntu-22.04
             platform: linux
             arch: x64
+            container: ubuntu:22.04
           - os: ubuntu-22.04-arm
             platform: linux
             arch: arm64
+            container: ubuntu:22.04
           - os: ubuntu-24.04
             platform: android
             arch: x64
@@ -54,30 +56,22 @@ jobs:
             platform: win32
             arch: arm64
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.platform }}-${{ matrix.arch }}${{ matrix.tags }}
+    container: ${{ matrix.container }}
+    name: Build / ${{ matrix.platform }}-${{ matrix.arch }}${{ matrix.tags }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - run: apt update && apt install -y git clang lld
+        if: ${{ matrix.platform == 'linux' }}
+      - uses: holepunchto/actions/bare-base@v1
+      - uses: holepunchto/actions/compile-prebuilds@v1
         with:
-          node-version: lts/*
-      - run: npm install -g bare-make
-      - run: npm install
-      - run: bare-make generate --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} ${{ matrix.flags }}
-      - run: bare-make build
-      - run: bare-make install
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.platform }}-${{ matrix.arch }}${{ matrix.tags }}
-          path: prebuilds/*
+          platform: ${{ matrix.platform }}
+          arch: ${{ matrix.arch }}
+          flags: ${{ matrix.flags }}
+          tags: ${{ matrix.tags}}
+          upload: true
   merge:
     runs-on: ubuntu-latest
     needs: prebuild
+    name: Merge
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: prebuilds
-          merge-multiple: true
-      - uses: actions/upload-artifact@v4
-        with:
-          name: prebuilds
-          path: prebuilds
+      - uses: holepunchto/actions/merge-prebuilds@v1

@@ -28,10 +28,7 @@ test('cnt', (t) => {
       result
     )
 
-    t.alike(
-      result,
-      Uint8Array.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0)
-    )
+    t.alike(result, Uint8Array.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0))
   })
 
   t.test('uint16array', (t) => {
