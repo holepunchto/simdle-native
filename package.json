@@ -13,10 +13,10 @@
   "addon": true,
   "scripts": {
     "format": "prettier --write .",
-    "lint": "prettier --check .",
-    "test": "npm run lint && npm run test:bare && npm run test:node",
-    "test:bare": "bare test.mjs",
-    "test:node": "node test.mjs"
+    "lint": "prettier --check . && lunte",
+    "test": "npm run test:node && npm run test:bare",
+    "test:bare": "brittle-bare test.mjs",
+    "test:node": "brittle-node test.mjs"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,8 @@
     "cmake-bare": "^1.1.7",
     "cmake-fetch": "^1.1.0",
     "cmake-napi": "^1.0.2",
+    "lunte": "^1.3.0",
     "prettier": "^3.6.2",
-    "prettier-config-holepunch": "^1.0.0"
+    "prettier-config-holepunch": "^2.0.0"
   }
 }
