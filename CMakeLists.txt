@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 4.0)
 
 find_package(cmake-bare REQUIRED PATHS node_modules/cmake-bare)
 find_package(cmake-fetch REQUIRED PATHS node_modules/cmake-fetch)
@@ -12,6 +12,7 @@ if(target MATCHES "win32")
   add_compile_options(/MT$<$<CONFIG:Debug>:d>)
 endif()
 
+fetch_package("github:holepunchto/libnapish#8cbfe78")
 fetch_package("github:holepunchto/libsimdle#014ad4e")
 fetch_package("github:holepunchto/libjstl#1890183")
 
@@ -45,20 +46,7 @@ target_link_libraries(
   PRIVATE
     $<TARGET_OBJECTS:simdle>
     jstl
+    napish::static
   PUBLIC
     simdle
-)
-
-target_compile_definitions(
-  ${simdle_native_node}
-  PRIVATE
-    NAPI_VERSION=9
-)
-
-resolve_node_module(bare-compat-napi compat)
-
-target_include_directories(
-  ${simdle_native_node}
-  PRIVATE
-    "${compat}/include"
 )
